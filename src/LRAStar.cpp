@@ -73,7 +73,7 @@ Path LRAStar::find_shortest_path(const State& start, const vector<pair<int, int>
 		{
 			curr->goal_id++;
 			if (curr->goal_id == (int)goal_locations.size())
-			{
+			{	
 				Path path(curr->state.timestep + 1);
 				for (int t = curr->state.timestep; t >= 0; t--)
 				{

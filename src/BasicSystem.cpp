@@ -570,7 +570,15 @@ void BasicSystem::solve()
 	LRAStar lra(G, solver.path_planner);
 	lra.simulation_window = simulation_window;
 	lra.k_robust = k_robust;
+
+    PIBT2Node pibt2_node(G, solver.path_planner);
+
 	solver.clear();
+
+    // pibt2_node.run(starts, goal_locations, time_limit);
+    // update_paths(pibt2_node.solution);
+    
+    
 	if (solver.get_name() == "LRA")
 	{
 		// predict travel time
@@ -669,14 +677,18 @@ void BasicSystem::solve()
 			 }
 			 else
 			 {
-				 lra.resolve_conflicts(solver.solution);
-				 update_paths(lra.solution);
+                cout << "Solving by PIBT2" << endl;
+                pibt2_node.run(starts, goal_locations, time_limit);
+                update_paths(pibt2_node.solution);
+				//  lra.resolve_conflicts(solver.solution);
+				//  update_paths(lra.solution);
 			 }
 		 }
 		 if (log)
 			 solver.save_search_tree(outfile + "/search_trees/" + std::to_string(timestep) + ".gv");
 
 	 }
+
 	 solver.save_results(outfile + "/solver.csv", std::to_string(timestep) + "," 
 										+ std::to_string(num_of_drives) + "," + std::to_string(seed));
 }
